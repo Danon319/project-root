@@ -44,3 +44,7 @@ h3,
 section {
   scroll-margin-top: 60px;
 }
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
