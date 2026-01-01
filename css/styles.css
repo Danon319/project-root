@@ -1,16 +1,20 @@
 /* ==========================================================================
-   3. HEADER (MECHANICAL UNROLL)
+   3. HEADER (DYNAMIC SIZE: BIG HERO BUTTON -> SLEEK BAR)
    ========================================================================== */
 
-/* --- 1. РАЗВЕРНУТОЕ СОСТОЯНИЕ (Обычный режим) --- */
+/* --- 1. РАЗВЕРНУТОЕ СОСТОЯНИЕ (Обычный режим - Тонкая полоска) --- */
 .fixed-header {
   position: fixed;
   top: 30px;
-  right: 30px; /* Жесткая привязка справа (Якорь) */
+  right: 30px; /* Якорь справа */
 
-  /* Ширина: 100% экрана минус отступы (30px слева + 30px справа) */
+  /* Ширина: 100% экрана минус отступы */
+  /* Важно: width анимируется скриптом/стилями Hero */
   width: calc(100% - 60px);
-  height: 80px;
+
+  /* ВЫСОТА: Тонкая полоска */
+  height: 60px;
+
   z-index: 1000;
 
   /* Стили */
@@ -23,13 +27,14 @@
   /* Flex: Контент слева, Кнопка справа */
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* Всё прижато к кнопке справа */
+  justify-content: flex-end; /* Прижимаем вправо к кнопке */
 
-  overflow: hidden; /* Скрывает ленту, когда она смотана */
+  overflow: hidden;
 
-  /* АНИМАЦИЯ: Меняем только ширину */
-  transition: width 0.8s cubic-bezier(0.75, 0, 0.25, 1), border-radius 0.6s ease,
-    background 0.4s ease;
+  /* АНИМАЦИЯ: Добавили height в список */
+  transition: width 0.8s cubic-bezier(0.75, 0, 0.25, 1),
+    height 0.6s cubic-bezier(0.75, 0, 0.25, 1),
+    /* Плавное изменение высоты */ border-radius 0.6s ease, background 0.4s ease;
 }
 
 [data-theme="light"] .fixed-header {
@@ -40,110 +45,80 @@
 
 /* --- КОНТЕНТ (Лента) --- */
 .header-content-slide {
-  /* Занимает все место слева от кнопки */
   flex-grow: 1;
   height: 100%;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  /* Отступы внутри ленты */
+  /* Ширина минус размер кнопки (60px в развернутом виде) */
+  width: calc(100% - 60px);
+
   padding-left: 2rem;
   padding-right: 1rem;
 
-  /* АНИМАЦИЯ КОНТЕНТА (Синхронно с шириной) */
+  /* АНИМАЦИЯ КОНТЕНТА */
   opacity: 1;
-  /* Контент на месте */
   transform: translateX(0);
-
   transition: opacity 0.3s ease 0.3s,
-    /* Появляется чуть позже, когда лента пошла */ transform 0.8s
-      cubic-bezier(0.75, 0, 0.25, 1); /* Едет вместе с шириной */
-
-  white-space: nowrap; /* Текст не ломается */
+    transform 0.8s cubic-bezier(0.75, 0, 0.25, 1);
+  white-space: nowrap;
 }
 
 .header-logo {
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: var(--text-color);
 }
-
-.header-logo:hover {
-  color: var(--primary-color);
-}
-
 .header-nav {
   display: flex;
   gap: 2rem;
 }
-
-/* Ссылки в меню */
 .header-nav a {
   color: var(--text-color);
   font-size: 0.95rem;
-  text-decoration: none;
-  transition: color 0.3s ease;
-
-  /* Важно для позиционирования линии */
+  transition: color 0.3s;
   position: relative;
-  padding-bottom: 5px; /* Отступ текста от линии */
+  padding-bottom: 5px;
+  text-decoration: none;
 }
-
 .header-nav a:hover {
-  color: var(--secondary-color); /* Цвет текста при наведении */
+  color: var(--secondary-color);
 }
-
-/* ЛИНИЯ-ТОЧКА СНИЗУ */
 .header-nav a::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
-
-  /* Размеры */
   width: 100%;
-  height: 3px; /* Толщина линии */
-  border-radius: 2px; /* Закругленные края (чтобы при сжатии была точкой) */
-
-  background-color: var(--secondary-color); /* Цвет линии */
-
-  /* МАГИЯ АНИМАЦИИ */
-  transform: scaleX(0); /* Изначально ширина 0 (сжата) */
-  transform-origin: center; /* Растет из центра */
-
+  height: 3px;
+  border-radius: 2px;
+  background-color: var(--secondary-color);
+  transform: scaleX(0);
+  transform-origin: center;
   transition: transform 0.3s cubic-bezier(0.65, 0, 0.35, 1);
 }
-
-/* При наведении растягиваем линию */
 .header-nav a:hover::after {
-  transform: scaleX(1); /* Растягивается до 100% */
+  transform: scaleX(1);
 }
 
-/* Кнопка Contact с анимацией заливки */
+/* Кнопка "Связаться" (Компактная) */
 .header-btn {
   position: relative;
-  padding: 0.6rem 1.5rem;
-
-  /* Цвета по умолчанию */
+  padding: 0.5rem 1.4rem;
   background: rgba(48, 54, 66, 0.6);
   color: var(--primary-color);
-
   border-radius: 30px;
-  font-size: 0.9rem;
-  font-weight: 700; /* Жирнее для читаемости на цветном фоне */
-
-  overflow: hidden; /* Скрываем слой заливки, пока он "за кадром" */
-  z-index: 1; /* Чтобы текст был поверх заливки */
+  font-size: 0.85rem;
+  font-weight: 700;
+  overflow: hidden;
+  z-index: 1;
   transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
   white-space: nowrap;
   text-decoration: none;
   letter-spacing: 1px;
 }
-
-/* СЛОЙ ЗАЛИВКИ (Псевдоэлемент) */
 .header-btn::before {
   content: "";
   position: absolute;
@@ -151,37 +126,26 @@
   left: 0;
   width: 100%;
   height: 100%;
-
-  /* Цвет заливки (Primary) */
   background-color: var(--primary-color);
-
-  /* Изначально сдвинут вниз (скрыт) */
   transform: translateY(101%);
-
-  /* Плавная анимация выезда */
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: -1; /* Помещаем ПОД текст */
+  z-index: -1;
   border-radius: 30px;
 }
-
-/* Эффекты при наведении */
 .header-btn:hover {
   border-color: var(--primary-color);
-  color: var(--bg-color); /* Текст меняется на цвет фона сайта (контраст) */
-  box-shadow: 0 5px 20px rgba(168, 213, 226, 0.3); /* Красивое свечение */
+  color: var(--bg-color);
+  box-shadow: 0 5px 20px rgba(168, 213, 226, 0.3);
 }
-
-/* Заливка поднимается вверх */
 .header-btn:hover::before {
   transform: translateY(0);
 }
 
-/* --- КНОПКА СМЕНЫ ТЕМЫ (Барабан) --- */
+/* --- КНОПКА СМЕНЫ ТЕМЫ (В хедере - маленькая 60px) --- */
 .theme-switch {
-  /* Фиксированный размер */
-  width: 80px;
-  height: 80px;
-  flex-shrink: 0; /* Не сжимать ни при каких условиях */
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
 
   background: transparent;
   border: none;
@@ -193,12 +157,15 @@
   cursor: pointer;
   z-index: 1002;
 
-  /* Анимация вращения барабана */
-  transform: rotate(-360deg); /* Развернут */
-  transition: transform 0.8s cubic-bezier(0.75, 0, 0.25, 1);
+  transform: rotate(-360deg);
+
+  /* Анимация размеров тоже */
+  transition: transform 0.8s cubic-bezier(0.75, 0, 0.25, 1),
+    width 0.6s cubic-bezier(0.75, 0, 0.25, 1),
+    height 0.6s cubic-bezier(0.75, 0, 0.25, 1);
 }
 
-/* --- АНИМАЦИЯ ИКОНОК (SUN <-> MOON) --- */
+/* Иконки */
 .icon-wrapper {
   position: relative;
   width: 24px;
@@ -207,54 +174,42 @@
   align-items: center;
   justify-content: center;
 }
-
 .theme-switch svg {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  /* Добавляем transform в транзишн */
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
 }
-
-/* 1. DARK MODE (По умолчанию) */
 .sun-icon {
   opacity: 1;
   transform: rotate(0deg) scale(1);
 }
-
 .moon-icon {
   opacity: 0;
-  /* Луна прячется: повернута и уменьшена */
   transform: rotate(90deg) scale(0.5);
 }
-
-/* 2. LIGHT MODE (Активен) */
 [data-theme="light"] .sun-icon {
   opacity: 0;
-  /* Солнце улетает: вращается в другую сторону и уменьшается */
   transform: rotate(-90deg) scale(0.5);
 }
-
 [data-theme="light"] .moon-icon {
   opacity: 1;
-  /* Луна появляется: встает ровно и увеличивается */
   transform: rotate(0deg) scale(1);
 }
 
 /* =========================================
-   2. HERO MODE (СМОТАННОЕ СОСТОЯНИЕ)
+   2. HERO MODE (Сжатое состояние - БОЛЬШАЯ КНОПКА)
    ========================================= */
 
 .fixed-header.hero-mode {
-  /* Ширина равна высоте (только кнопка) */
+  /* БОЛЬШАЯ КНОПКА */
   width: 80px;
+  height: 80px;
 
-  /* Превращаем в круг */
   border-radius: 50%;
 
-  /* Темный фон кнопки */
   background: rgba(15, 17, 21, 0.9);
   border-color: rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
@@ -270,16 +225,18 @@
 /* --- СМАТЫВАНИЕ КОНТЕНТА --- */
 .fixed-header.hero-mode .header-content-slide {
   opacity: 0;
-  /* Сдвигаем контент ВПРАВО (под кнопку) на 100px */
+  /* Сдвигаем вправо (под кнопку) */
   transform: translateX(100px);
 
   pointer-events: none;
-  /* Исчезает быстрее, чем сматывается ширина */
   transition: opacity 0.2s ease, transform 0.8s cubic-bezier(0.75, 0, 0.25, 1);
 }
 
-/* --- ВРАЩЕНИЕ БАРАБАНА (ОБРАТНО) --- */
+/* --- КНОПКА ТЕМЫ (Становится большой 80px) --- */
 .fixed-header.hero-mode .theme-switch {
+  width: 80px;
+  height: 80px;
+
   border-left-color: transparent;
   transform: rotate(0deg); /* Исходное положение */
 }
@@ -295,10 +252,9 @@
 /* =========================================
    АДАПТАЦИЯ
    ========================================= */
-/* Мобильное меню */
 .mobile-menu-dropdown {
   position: absolute;
-  top: 90px;
+  top: 75px;
   right: 0;
   width: 250px;
   background: var(--nav-bg);
@@ -324,6 +280,69 @@
   display: none;
 }
 
+@media (max-width: 1024px) {
+  .header-nav,
+  .header-btn {
+    display: none;
+  }
+  .mobile-burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 22px;
+    height: 16px;
+    cursor: pointer;
+    margin-right: 1rem;
+  }
+  .mobile-burger span {
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-color);
+    transition: 0.3s;
+  }
+
+  /* Выравнивание на планшете */
+  .header-content-slide {
+    justify-content: flex-start;
+  }
+  .header-logo {
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .fixed-header {
+    top: 15px;
+    right: 15px;
+    /* На мобильном маленькая и там, и там */
+    height: 60px;
+    width: calc(100% - 30px);
+    border-radius: 30px;
+  }
+
+  .fixed-header.hero-mode {
+    width: 60px;
+    height: 60px;
+  }
+
+  .theme-switch {
+    width: 60px;
+    height: 60px;
+  }
+  .fixed-header.hero-mode .theme-switch {
+    width: 60px;
+    height: 60px;
+  }
+
+  .header-content-slide {
+    padding-left: 1.5rem;
+    padding-right: 0.5rem;
+    width: calc(100% - 60px);
+  }
+  .mobile-burger {
+    margin-right: 0.5rem;
+  }
+}
 /* ==========================================================================
    4. HERO SECTION
    ========================================================================== */
