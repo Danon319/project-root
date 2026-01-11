@@ -331,7 +331,7 @@
   }
   .fixed-header.hero-mode .theme-switch {
     width: 60px;
-    height: 60px;s
+    height: 60px;
   }
 
   .header-content-slide {
@@ -343,6 +343,7 @@
     margin-right: 0.5rem;
   }
 }
+
 /* ==========================================================================
    4. HERO SECTION
    ========================================================================== */
@@ -411,6 +412,7 @@
   margin-right: 10px;
   animation: pulse 2s infinite;
 }
+
 @keyframes pulse {
   0% {
     box-shadow: 0 0 0 0 rgba(243, 166, 131, 0.4);

@@ -7,8 +7,8 @@
 }
 
 * ::selection {
-  background-color: var(--highlighted-background);
-  color: var(--highlighted-text);
+  background-color: var(--primary-color);
+  color: var(--bg-color);
 }
 
 html {
